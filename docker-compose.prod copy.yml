@@ -25,6 +25,7 @@ services:
     build: 
       context: ./spotify-agentic-system-backend
       dockerfile: Dockerfile
+    command: ["/bin/sh", "scripts/start.sh"]
     restart: always
     ports:
       - "8000:8000"
