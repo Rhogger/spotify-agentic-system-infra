@@ -1,0 +1,11 @@
+# Ambientes e Dependências
+.env
+
+# Docker
+.docker/
+
+#Repos
+spotify-mcp-server
+spotify-agentic-system-backend
+spotify-agentic-system-frontend
+spotify-music-recomendation-ds-ml
