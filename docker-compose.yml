@@ -43,8 +43,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      mcp:
-        condition: service_started
+      # mcp:
+      #   condition: service_started
     networks:
       - spotify_net
     healthcheck:
@@ -54,43 +54,67 @@ services:
       retries: 5
 
 # ------------------------------------------------------------------
-# 3. MCP SERVER (Node.js)
+# 3. ADK WEB (Python/Google ADK)
 # ------------------------------------------------------------------
-  mcp:
-    container_name: mcp_server
-    build:
-      context: ./spotify-mcp-server
+  adk-web:
+    container_name: adk_web
+    build: 
+      context: ./spotify-agentic-system-backend
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - PORT=3000
     volumes:
-      - ./spotify-mcp-server/spotify-config.json:/app/spotify-config.json
+      - ./spotify-agentic-system-backend:/app
+    ports:
+      - "8081:8000"
+    command: adk web app/ --port 8000 --host 0.0.0.0
+    env_file:
+      - ./spotify-agentic-system-backend/.env
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - PYTHONPATH=/app
+    depends_on:
+      - backend
+      - db
     networks:
       - spotify_net
 
 # ------------------------------------------------------------------
-# 4. FRONTEND (Nuxt)
+# 4. MCP SERVER (Node.js)
 # ------------------------------------------------------------------
-  frontend:
-    container_name: nuxt_frontend
-    build:
-      context: ./spotify-agentic-system-frontend
-      dockerfile: Dockerfile
-    command: sh -c "npm install && npm run dev"
-    volumes:
-      - ./spotify-agentic-system-frontend:/app
-      - /app/node_modules
-    ports:
-      - "3001:3000"
-    environment:
-      - NODE_ENV=development
-      - NUXT_PUBLIC_API_BASE=http://localhost:8000/api
-      - HOST=0.0.0.0
-      - PORT=3000
-    networks:
-      - spotify_net
+  # mcp:
+  #   container_name: mcp_server
+  #   build:
+  #     context: ./spotify-mcp-server
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - PORT=3000
+  #   volumes:
+  #     - ./spotify-mcp-server/spotify-config.json:/app/spotify-config.json
+  #   networks:
+  #     - spotify_net
+
+# ------------------------------------------------------------------
+# 5. FRONTEND (Nuxt)
+# ------------------------------------------------------------------
+  # frontend:
+  #   container_name: nuxt_frontend
+  #   build:
+  #     context: ./spotify-agentic-system-frontend
+  #     dockerfile: Dockerfile
+  #   command: sh -c "npm install && npm run dev"
+  #   volumes:
+  #     - ./spotify-agentic-system-frontend:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - "3001:3000"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - NUXT_PUBLIC_API_BASE=http://localhost:8000/api
+  #     - HOST=0.0.0.0
+  #     - PORT=3000
+  #   networks:
+  #     - spotify_net
 
 volumes:
   postgres_data:
