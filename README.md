@@ -1,8 +1,36 @@
-# Spotify Agentic System - Infrastructure
+# Spotify Recs - Infrastructure
 
-Este repositório centraliza a infraestrutura e orquestração dos serviços do **Spotify Agentic System**. O projeto utiliza **Docker** e **Docker Compose** para subir todo o ambiente de desenvolvimento, integrando Frontend, Backend, MCP Server e Banco de Dados.
+Este repositório centraliza a infraestrutura e orquestração dos serviços do **Spotify Recs**. O projeto utiliza **Docker** e **Docker Compose** para subir todo o ambiente de desenvolvimento, integrando Frontend, Backend, MCP Server e Banco de Dados.
 
 ## 🏗️ Arquitetura e Serviços
+
+![Arquitetura do Sistema](assets/images/preview.png)
+
+A arquitetura do **Spotify Recs** foi projetada para ser modular e orientada a agentes, conectando interfaces ricas com lógica de IA avançada.
+
+### Fluxo de Comunicação e Integrações
+
+1. **Frontend (Nuxt 4)**:
+   - Interface principal para o usuário.
+   - Comunica-se com o **Backend** via REST API para comandos e chat.
+   - Integra-se diretamente ao **Spotify Web Playback SDK** para reproduzir música no navegador do cliente.
+
+2. **Backend (FastAPI)**:
+   - Atua como o orquestrador central e "cérebro" do sistema.
+   - Gerencia sessões de usuário e autenticação.
+   - Utiliza Agentes Reativos para processar linguagem natural e decidir quais ferramentas chamar.
+   - Conecta-se ao **MCP Server** via protocolo SSE (Server-Sent Events) para executar ações no Spotify.
+
+3. **MCP Server (Node.js)**:
+   - Fornece uma camada de abstração padronizada (Model Context Protocol) sobre a API do Spotify.
+   - Expõe ferramentas ("tools") como *Play*, *Search*, *Create Playlist* que são consumidas pelos agentes do Backend.
+   - Não armazena estado, agindo puramente como um executor de ações autenticadas.
+
+4. **Database (PostgreSQL)**:
+   - Armazenamento persistente de dados relacionais e vetoriais (embeddings).
+   - Utilizado pelo Backend para RAG (Retrieval-Augmented Generation) e histórico de conversas.
+
+### Serviços Containerizados
 
 O sistema é composto pelos seguintes contêineres:
 
