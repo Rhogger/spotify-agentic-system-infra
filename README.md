@@ -8,14 +8,15 @@ O sistema é composto pelos seguintes contêineres:
 
 | Serviço | Tecnologia | Porta Host | Descrição |
 | :--- | :--- | :--- | :--- |
-| **Frontend** | Nuxt.js | `3000` | Interface do usuário. Acessível em [http://localhost:3000](http://localhost:3000). |
+| **Frontend** | Nuxt | `3001` | Interface do usuário. Acessível em [http://localhost:3001](http://localhost:3001). |
 | **Backend** | FastAPI (Python) | `8000` | API principal e lógica do agente. Docs em [http://localhost:8000/api/docs](http://localhost:8000/api/docs). |
-| **MCP Server** | Node.js | `3000` | Servidor MCP (Model Context Protocol) para integração com Spotify. |
+| **MCP Server** | Node | `3000` | Servidor MCP (Model Context Protocol) para integração com Spotify. |
 | **Database** | PostgreSQL 15 | `5432` | Banco de dados persistente. |
 
 ## 🚀 Pré-requisitos
 
 Certifique-se de ter instalado em sua máquina:
+
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
@@ -45,10 +46,11 @@ Cada serviço possui suas próprias configurações. Acesse os diretórios (ou l
 Configure o arquivo `.env` na raiz deste repositório (infra):
 
 1. Copie o arquivo de exemplo:
+
    ```bash
    cp .env.example .env
    ```
-   
+
 2. Edite o arquivo `.env` com suas credenciais do Postgres.
 
 ## 💾 Banco de Dados
@@ -56,7 +58,6 @@ Configure o arquivo `.env` na raiz deste repositório (infra):
 O banco de dados será populado automaticamente na primeira inicialização (seed), caso esteja vazio. O script de inicialização do backend verifica a existência de dados antes de executar a importação.
 
 ## ▶️ Inicializando a Infraestrutura
-
 
 Para subir todo o ambiente em modo de desenvolvimento (com *hot-reload* ativado onde aplicável), execute:
 
@@ -70,6 +71,7 @@ docker compose up --build
 ## 🔍 Detalhes da Rede
 
 Todos os serviços se comunicam através da rede interna `spotify_net`.
+
 - O **Backend** acessa o banco via hostname `db`.
 - O **Backend** acessa o MCP via hostname `mcp`.
 - O **Frontend** acessa o Backend via `http://localhost:8000` (browser) ou comunicação interna server-side se configurado na mesma rede.
